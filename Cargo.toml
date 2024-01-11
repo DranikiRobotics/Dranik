@@ -1,0 +1,21 @@
+[workspace]
+resolver = "2" # Resolver version (keep it 2)
+members = [
+    # The robot code (hardware abstractions, python runtime, http server)
+    "dranik",
+]
+
+[workspace.package]
+# Contributors of team Draniki may add their name bellow
+authors = [
+    "Матвей Т <https://matveit.dev> AtomicGamer9523@github"
+]
+# Github Repository
+repository = "https://github.com/DranikiRobotics/Dranik"
+# Rust edition (keep it 2021)
+edition = "2021"
+# License of the entire workspace
+license = "BSD-2-Clause"
+
+# Version of the entire workspace
+version = "0.0.1-dev"
