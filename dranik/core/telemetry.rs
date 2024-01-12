@@ -17,3 +17,11 @@ pub trait Telemetry {
     /// This will always be displayed to the driver control station.
     fn send<T: Display>(&self, message: T);
 }
+
+#[doc(hidden)]
+impl Telemetry for () {
+    #[inline(always)]
+    fn debug<T: Debug>(&self, _: T) {}
+    #[inline(always)]
+    fn send<T: Display>(&self, _: T) {}
+}

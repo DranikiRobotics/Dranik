@@ -13,6 +13,10 @@ pub enum HardwareError {
     DeviceDisconnected,
     /// The device was not found
     DeviceNotFound,
+    /// The method was not implemented
+    /// 
+    /// Or a stub was called
+    MethodNotImplemented,
     /// Some other error occurred
     Other {
         /// The error message
@@ -34,6 +38,7 @@ impl HardwareError {
         match self {
             HardwareError::DeviceDisconnected => "Device disconnected",
             HardwareError::DeviceNotFound => "Device not found",
+            HardwareError::MethodNotImplemented => "Method not implemented",
             HardwareError::Other { message } => message,
         }
     }

@@ -17,18 +17,6 @@ path = "../dranik.rs"
 
 [dependencies]
 # Core of the robot (hardware abstraction layer)
-dranik-core = { path = "./core" }
-# Robot HTTP client, used to control the robot via HTTP
-dranik-web = { path = "./web" }
-# Python runtime for the robot
-dranik-python = { path = "./python" }
+dranik-core = { path = "./core", features = ["reveal_modules"] }
 # Async runtime
-tokio = { version = "1.35", features = ["rt", "signal"] }
-
-[features]
-default = ["only-builtins"]
-
-only-builtins = [
-    "dranik-core/only_builtins",
-    "dranik-python/dranik-only-builtins",
-]
+# tokio = { version = "1.35", features = ["full"] }

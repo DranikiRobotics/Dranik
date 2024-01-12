@@ -1,91 +1,101 @@
-use crate::hardware::HardwareComponent;
+//! Gamepad-related structs and traits
+
+use crate::*;
 
 /// A trait that allows for reading from a gamepad
 ///
 /// This is a trait so that it can be implemented for any gamepad
-pub trait Gamepad: HardwareComponent {
+pub trait Gamepad: Clone + PartialEq + Send + Sync {
     /// Returns the state of the dpad
     ///
     /// Includes up, down, left, and right
-    fn dpad(&self) -> crate::Result<GamepadDpad>;
+    fn dpad(&self) -> Result<GamepadDpad>;
     /// Returns the state of the left stick
     ///
     /// Includes x, y, and pressed
-    fn left_stick(&self) -> crate::Result<GamepadStick>;
+    fn left_stick(&self) -> Result<GamepadStick>;
     /// Returns the state of the right stick
     ///
     /// Includes x, y, and pressed
-    fn right_stick(&self) -> crate::Result<GamepadStick>;
+    fn right_stick(&self) -> Result<GamepadStick>;
     /// Returns the state of the left trigger
-    fn left_trigger(&self) -> crate::Result<l2math::Float64>;
+    fn left_trigger(&self) -> Result<l2math::Float64>;
     /// Returns the state of the right trigger
-    fn right_trigger(&self) -> crate::Result<l2math::Float64>;
+    fn right_trigger(&self) -> Result<l2math::Float64>;
     /// Is the A button pressed?
-    fn a(&self) -> crate::Result<bool>;
+    fn a(&self) -> Result<bool>;
     /// Is the B button pressed?
-    fn b(&self) -> crate::Result<bool>;
+    fn b(&self) -> Result<bool>;
     /// Is the X button pressed?
-    fn x(&self) -> crate::Result<bool>;
+    fn x(&self) -> Result<bool>;
     /// Is the Y button pressed?
-    fn y(&self) -> crate::Result<bool>;
+    fn y(&self) -> Result<bool>;
     /// Is the left bumper pressed?
-    fn left_bumper(&self) -> crate::Result<bool>;
+    fn left_bumper(&self) -> Result<bool>;
     /// Is the right bumper pressed?
-    fn right_bumper(&self) -> crate::Result<bool>;
+    fn right_bumper(&self) -> Result<bool>;
 
     /// A non-standard 'back' button
     #[inline]
-    fn back(&self) -> crate::Result<bool> {
-        Err(crate::HardwareError::Other {
+    fn back(&self) -> Result<bool> {
+        Err(HardwareError::Other {
             message: "This gamepad does not have a 'back' button",
         })
     }
     /// A non-standard 'start' button
     #[inline]
-    fn start(&self) -> crate::Result<bool> {
-        Err(crate::HardwareError::Other {
+    fn start(&self) -> Result<bool> {
+        Err(HardwareError::Other {
             message: "This gamepad does not have a 'start' button",
         })
     }
 }
 
-/// Allows for the gamepad to be modified
-///
-/// PLEASE DO NOT MODIFY THE GAMEPAD ON THE MAIN THREAD
-pub trait MutableGamepad: Gamepad {
-    /// Sets the state of the dpad
-    fn set_dpad(&mut self, dpad: GamepadDpad) -> crate::Result;
-    /// Sets the state of the left stick
-    fn set_left_stick(&mut self, stick: GamepadStick) -> crate::Result;
-    /// Sets the state of the right stick
-    fn set_right_stick(&mut self, stick: GamepadStick) -> crate::Result;
-    /// Sets the state of the left trigger
-    fn set_left_trigger(&mut self, trigger: f64) -> crate::Result;
-    /// Sets the state of the right trigger
-    fn set_right_trigger(&mut self, trigger: f64) -> crate::Result;
-    /// Sets the state of the A button
-    fn set_a(&mut self, value: bool) -> crate::Result;
-    /// Sets the state of the B button
-    fn set_b(&mut self, value: bool) -> crate::Result;
-    /// Sets the state of the X button
-    fn set_x(&mut self, value: bool) -> crate::Result;
-    /// Sets the state of the Y button
-    fn set_y(&mut self, value: bool) -> crate::Result;
-    /// Sets the state of the left bumper
-    fn set_left_bumper(&mut self, value: bool) -> crate::Result;
-    /// Sets the state of the right bumper
-    fn set_right_bumper(&mut self, value: bool) -> crate::Result;
-    /// Sets the state of the 'back' button
-    fn set_back(&mut self, _value: bool) -> crate::Result {
-        Err(crate::HardwareError::Other {
-            message: "This gamepad does not have a 'back' button",
-        })
+#[doc(hidden)]
+impl Gamepad for () {
+    #[inline(always)]
+    fn dpad(&self) -> Result<GamepadDpad> {
+        Err(HardwareError::MethodNotImplemented)
     }
-    /// Sets the state of the 'start' button
-    fn set_start(&mut self, _value: bool) -> crate::Result {
-        Err(crate::HardwareError::Other {
-            message: "This gamepad does not have a 'start' button",
-        })
+    #[inline(always)]
+    fn left_stick(&self) -> Result<GamepadStick> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn right_stick(&self) -> Result<GamepadStick> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn left_trigger(&self) -> Result<l2math::Float64> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn right_trigger(&self) -> Result<l2math::Float64> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn a(&self) -> Result<bool> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn b(&self) -> Result<bool> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn x(&self) -> Result<bool> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn y(&self) -> Result<bool> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn left_bumper(&self) -> Result<bool> {
+        Err(HardwareError::MethodNotImplemented)
+    }
+    #[inline(always)]
+    fn right_bumper(&self) -> Result<bool> {
+        Err(HardwareError::MethodNotImplemented)
     }
 }
 

@@ -4,7 +4,6 @@
 //! multi-threaded environment.
 
 /// Macro for implementing [`Send`] and [`Sync`] for a struct.
-#[macro_export]
 macro_rules! thread_safe {
     ($struct: ident < $($generics: ident),* >) => {
         #[allow(unsafe_code)]
@@ -54,7 +53,7 @@ mod holders {
         }
     }
 
-    impl<'a, T> std::ops::Deref for SafeHeldMut<'a, T> {
+    impl<'a, T> core::ops::Deref for SafeHeldMut<'a, T> {
         type Target = T;
         #[inline]
         fn deref(&self) -> &Self::Target {
@@ -62,7 +61,7 @@ mod holders {
         }
     }
 
-    impl<'a, T> std::ops::DerefMut for SafeHeldMut<'a, T> {
+    impl<'a, T> core::ops::DerefMut for SafeHeldMut<'a, T> {
         #[inline]
         fn deref_mut(&mut self) -> &mut Self::Target {
             &mut *self.0
@@ -88,10 +87,11 @@ mod holders {
             Ok(SafeHeldMut(self.0.lock().map_err(|_| POISON_MESSAGE)?))
         }
     }
-
-    crate::prelude::thread_safe!(ThreadSafeHolder<T>);
 }
 
+thread_safe!(ThreadSafe<T>);
+
+#[allow(unused)]
 #[cfg(not(feature = "internals"))]
 pub(crate) use holders::{GetResult, GetResultMut, SafeHeld, SafeHeldMut, StandardResult};
 #[cfg(feature = "internals")]
