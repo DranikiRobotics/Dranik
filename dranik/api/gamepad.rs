@@ -2,9 +2,10 @@
 
 use crate::*;
 
-/// A trait that allows for reading from a gamepad
-///
-/// This is a trait so that it can be implemented for any gamepad
+/// A trait that allows for reading from a gamepad.
+/// 
+/// Although this is a trait, it is not meant to be implemented by the user.
+/// Instead, it is implemented by this crate.
 pub trait Gamepad: Clone + PartialEq + Send + Sync {
     /// Returns the state of the dpad
     ///
@@ -48,54 +49,6 @@ pub trait Gamepad: Clone + PartialEq + Send + Sync {
         Err(HardwareError::Other {
             message: "This gamepad does not have a 'start' button",
         })
-    }
-}
-
-#[doc(hidden)]
-impl Gamepad for () {
-    #[inline(always)]
-    fn dpad(&self) -> Result<GamepadDpad> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn left_stick(&self) -> Result<GamepadStick> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn right_stick(&self) -> Result<GamepadStick> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn left_trigger(&self) -> Result<l2math::Float64> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn right_trigger(&self) -> Result<l2math::Float64> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn a(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn b(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn x(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn y(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn left_bumper(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn right_bumper(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
     }
 }
 

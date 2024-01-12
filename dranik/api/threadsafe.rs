@@ -3,6 +3,8 @@
 //! This module contains thread-safe values that can be used in a
 //! multi-threaded environment.
 
+#![allow(unused)]
+
 /// Macro for implementing [`Send`] and [`Sync`] for a struct.
 macro_rules! thread_safe {
     ($struct: ident < $($generics: ident),* >) => {
@@ -91,10 +93,6 @@ mod holders {
 
 thread_safe!(ThreadSafe<T>);
 
-#[allow(unused)]
-#[cfg(not(feature = "internals"))]
-pub(crate) use holders::{GetResult, GetResultMut, SafeHeld, SafeHeldMut, StandardResult};
-#[cfg(feature = "internals")]
 pub use holders::{GetResult, GetResultMut, SafeHeld, SafeHeldMut, StandardResult};
 
 /// A thread-safe value.
@@ -257,7 +255,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`i8`] that is thread-safe.
     ///
     /// [`i8`]: https://doc.rust-lang.org/std/primitive.i8.html
-    #[allow(dead_code)]
     pub type ThreadSafeI8 = i8; {thread_safe_i8; 0}
 
     /// A thread-safe 8-bit unsigned integer.
@@ -265,7 +262,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`u8`] that is thread-safe.
     ///
     /// [`u8`]: https://doc.rust-lang.org/std/primitive.u8.html
-    #[allow(dead_code)]
     pub type ThreadSafeU8 = u8; {thread_safe_u8; 0}
 
     /// A thread-safe 16-bit signed integer.
@@ -273,7 +269,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`i16`] that is thread-safe.
     ///
     /// [`i16`]: https://doc.rust-lang.org/std/primitive.i16.html
-    #[allow(dead_code)]
     pub type ThreadSafeI16 = i16; {thread_safe_i16; 0}
 
     /// A thread-safe 16-bit unsigned integer.
@@ -281,7 +276,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`u16`] that is thread-safe.
     ///
     /// [`u16`]: https://doc.rust-lang.org/std/primitive.u16.html
-    #[allow(dead_code)]
     pub type ThreadSafeU16 = u16; {thread_safe_u16; 0}
 
     /// A thread-safe 32-bit signed integer.
@@ -289,7 +283,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`i32`] that is thread-safe.
     ///
     /// [`i32`]: https://doc.rust-lang.org/std/primitive.i32.html
-    #[allow(dead_code)]
     pub type ThreadSafeI32 = i32; {thread_safe_i32; 0}
 
     /// A thread-safe 32-bit unsigned integer.
@@ -297,7 +290,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`u32`] that is thread-safe.
     ///
     /// [`u32`]: https://doc.rust-lang.org/std/primitive.u32.html
-    #[allow(dead_code)]
     pub type ThreadSafeU32 = u32; {thread_safe_u32; 0}
 
     /// A thread-safe 64-bit signed integer.
@@ -305,7 +297,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`i64`] that is thread-safe.
     ///
     /// [`i64`]: https://doc.rust-lang.org/std/primitive.i64.html
-    #[allow(dead_code)]
     pub type ThreadSafeI64 = i64; {thread_safe_i64; 0}
 
     /// A thread-safe 64-bit unsigned integer.
@@ -313,7 +304,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`u64`] that is thread-safe.
     ///
     /// [`u64`]: https://doc.rust-lang.org/std/primitive.u64.html
-    #[allow(dead_code)]
     pub type ThreadSafeU64 = u64; {thread_safe_u64; 0}
 
     /// A thread-safe 128-bit signed integer.
@@ -321,7 +311,6 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`i128`] that is thread-safe.
     ///
     /// [`i128`]: https://doc.rust-lang.org/std/primitive.i128.html
-    #[allow(dead_code)]
     pub type ThreadSafeI128 = i128; {thread_safe_i128; 0}
 
     /// A thread-safe 128-bit unsigned integer.
@@ -329,6 +318,5 @@ thread_safe_primitive! {
     /// This is a wrapper around a [`u128`] that is thread-safe.
     ///
     /// [`u128`]: https://doc.rust-lang.org/std/primitive.u128.html
-    #[allow(dead_code)]
     pub type ThreadSafeU128 = u128; {thread_safe_u128; 0}
 }

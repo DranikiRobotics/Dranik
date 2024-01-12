@@ -15,8 +15,6 @@ path = "lib.rs"
 name = "dranik"
 path = "../dranik.rs"
 
-[dependencies]
-# Core of the robot (hardware abstraction layer)
-dranik-core = { path = "./core", features = ["reveal_modules"] }
-# Async runtime
-# tokio = { version = "1.35", features = ["full"] }
+[dependencies.dranik-api]
+features = ["bin"]
+path = "./api"

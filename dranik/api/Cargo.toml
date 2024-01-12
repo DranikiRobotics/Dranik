@@ -1,0 +1,25 @@
+[package]
+name = "dranik-api"
+description = "Dranik Robot API"
+repository.workspace = true
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lib]
+path = "lib.rs"
+
+[dependencies.l2math]
+git = "https://github.com/DranikiRobotics/librobomath"
+package = "l2math"
+
+[dependencies.libtrig]
+git = "https://github.com/DranikiRobotics/librobomath"
+package = "libtrig"
+
+[dependencies.pyo3]
+version = "0.20"
+
+[features]
+bin = []

@@ -2,7 +2,7 @@
 #![warn(missing_docs, unused, clippy::all, unsafe_code)]
 #![deny(missing_debug_implementations)]
 
-mod internals;
+use dranik_api::prelude::RobotConfig;
 
 /// Helps with loading robot configurations.
 /// 
@@ -49,8 +49,6 @@ macro_rules! main {
     } );
 }
 
-pub use dranikcore::prelude::RobotConfig;
-
 /// This is the actual main function that is called by the robot.
 /// 
 /// It isn't recommended to call this function directly.
@@ -74,8 +72,8 @@ pub use dranikcore::prelude::RobotConfig;
 /// 
 /// [`main!`]: crate::main!
 pub fn main<C: RobotConfig + 'static>() {
-    internals::main::<C>();
+    dranik_api::bin::main::<C>();
 }
 
 #[doc(hidden)]
-pub use internals::__dranik_config;
+pub use dranik_api::bin::__dranik_config;

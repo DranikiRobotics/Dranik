@@ -17,7 +17,10 @@ pub trait RobotConfig {
     /// The type that will be used for gamepad
     type GamepadImpl: Gamepad;
     /// The type that will be used for op
-    type OpImpl: Op<Self::TelemetryImpl, Self::GamepadImpl>;
+    type OpImpl: Op<
+        TelemetryImpl = Self::TelemetryImpl,
+        GamepadImpl = Self::GamepadImpl,
+    >;
     /// This function is called to build the arguments that will be passed to the python main function
     #[inline(always)]
     fn build_python_main_function_args<'a>(

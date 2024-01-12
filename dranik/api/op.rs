@@ -1,13 +1,15 @@
-use crate::threadsafe::*;
-use crate::prelude::*;
-use crate::*;
+use super::threadsafe::*;
+use super::prelude::*;
+use super::*;
 
 /// An `Op`eration that is going to be run by the robot
 
-pub trait Op<T, G> where
-    T: Telemetry,
-    G: Gamepad,
-{
+pub trait Op: Clone + PartialEq + Send + Sync {
+    /// The telemetry type of the op mode
+    type TelemetryImpl: Telemetry;
+    /// The gamepad type of the op mode
+    type GamepadImpl: Gamepad;
+
     /// Returns if the op mode is running
     /// 
     /// If the mutex is poisoned, this will return false
@@ -28,7 +30,7 @@ pub trait Op<T, G> where
     /// See [`Telemetry`] for more information.
     /// 
     /// [`Telemetry`]: ./trait.Telemetry.html
-    fn telemetry(&self) -> GetResult<'_, T>;
+    fn telemetry(&self) -> GetResult<'_, Self::TelemetryImpl>;
     /// Returns a cloned version of the [`Telemetry`] of the op mode.
     /// 
     /// This doesn't do bit for bit cloning, but instead, it clones the
@@ -38,7 +40,7 @@ pub trait Op<T, G> where
     /// 
     /// [`Telemetry`]: ./trait.Telemetry.html
     /// [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
-    fn get_telemetry(&self) -> ThreadSafe<T>;
+    fn get_telemetry(&self) -> ThreadSafe<Self::TelemetryImpl>;
     /// Returns the [`Gamepad`] of the op mode.
     /// 
     /// Used for controlling the in TeleOp Modes.
@@ -46,7 +48,7 @@ pub trait Op<T, G> where
     /// See [`Gamepad`] for more information.
     /// 
     /// [`Gamepad`]: ./trait.Gamepad.html
-    fn gamepad(&self) -> GetResult<'_, G>;
+    fn gamepad(&self) -> GetResult<'_, Self::GamepadImpl>;
     /// Returns a cloned version of the [`Gamepad`] of the op mode.
     /// 
     /// This doesn't do bit for bit cloning, but instead, it clones the
@@ -56,43 +58,12 @@ pub trait Op<T, G> where
     /// 
     /// [`Gamepad`]: ./trait.Gamepad.html
     /// [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
-    fn get_gamepad(&self) -> ThreadSafe<G>;
+    fn get_gamepad(&self) -> ThreadSafe<Self::GamepadImpl>;
     /// Returns the amount of time that the op mode has been running for
     fn get_start_time(&self) -> std::time::Instant;
     /// Returns the amount of time that the op mode has been running for
     #[inline(always)]
     fn get_running_for(&self) -> core::time::Duration {
         std::time::Instant::now() - self.get_start_time()
-    }
-}
-
-impl Op<(), ()> for () {
-    #[inline(always)]
-    fn running(&self) -> bool {
-        false
-    }
-    #[inline(always)]
-    fn running_result(&self) -> Result<bool> {
-        Err(HardwareError::MethodNotImplemented)
-    }
-    #[inline(always)]
-    fn telemetry(&self) -> GetResult<'_, ()> {
-        Err(HardwareError::MethodNotImplemented.as_str())
-    }
-    #[inline(always)]
-    fn get_telemetry(&self) -> ThreadSafe<()> {
-        unreachable!("This should never be called")
-    }
-    #[inline(always)]
-    fn gamepad(&self) -> GetResult<'_, ()> {
-        Err(HardwareError::MethodNotImplemented.as_str())
-    }
-    #[inline(always)]
-    fn get_gamepad(&self) -> ThreadSafe<()> {
-        unreachable!("This should never be called")
-    }
-    #[inline(always)]
-    fn get_start_time(&self) -> std::time::Instant {
-        unreachable!("This should never be called")
     }
 }

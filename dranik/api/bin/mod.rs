@@ -1,9 +1,10 @@
-use dranikcore::prelude::*;
+use crate::prelude::*;
 
-pub(crate) fn main<C: RobotConfig + 'static>() {
-    
+mod impls;
+
+pub fn main<C: RobotConfig + 'static>() {
+    println!("Hello, world!");
 }
-
 
 /// Internal struct that is used to hold the robot config.
 /// 
@@ -12,7 +13,7 @@ pub(crate) fn main<C: RobotConfig + 'static>() {
 #[derive(Default, Debug, Clone, Copy)]
 pub struct __dranik_config;
 impl RobotConfig for __dranik_config {
-    type TelemetryImpl = ();
-    type GamepadImpl = ();
-    type OpImpl = ();
+    type TelemetryImpl = impls::TelemetryImpl;
+    type GamepadImpl = impls::GamepadImpl;
+    type OpImpl = impls::OpImpl;
 }
