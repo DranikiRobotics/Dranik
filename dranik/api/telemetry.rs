@@ -1,20 +1,60 @@
-use core::fmt::{Debug, Display};
-
 /// A type that allows sending telemetry data to the driver control station
 /// 
 /// Although this is a trait, it is not meant to be implemented by the user.
 /// Instead, it is implemented by this crate.
-pub trait Telemetry: Clone + PartialEq + Send + Sync {
-    /// Sends a debug message to the driver control station
-    /// 
-    /// It will not be displayed to the driver control station if the robot is not in debug mode.
-    /// 
-    /// If this fails, it will fail silently.
-    fn debug<T: Debug>(&self, message: T);
+pub trait Telemetry {
     /// Sends a message to the driver control station
     /// 
-    /// This will always be displayed to the driver control station.
-    /// 
     /// If this fails, it will fail silently.
-    fn send<T: Display>(&self, message: T);
+    fn send(&self, message: TelemetryMessage);
+
+    /// Sends a log message to the driver control station
+    #[inline]
+    fn log(&self, message: String) {
+        self.send(TelemetryMessage::Log(message));
+    }
+    /// Sends a debug message to the driver control station
+    #[inline]
+    fn debug(&self, message: String) {
+        self.send(TelemetryMessage::Debug(message));
+    }
+    /// Sends an error message to the driver control station
+    #[inline]
+    fn error(&self, message: String) {
+        self.send(TelemetryMessage::Error(message));
+    }
+}
+
+/// A message that can be sent to the driver control station
+#[repr(C)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum TelemetryMessage {
+    /// A standard log message
+    Log(String),
+    /// A debug message
+    Debug(String),
+    /// An error message
+    Error(String),
+}
+
+impl ToString for TelemetryMessage {
+    #[inline]
+    fn to_string(&self) -> String {
+        match self {
+            TelemetryMessage::Log(message) => format!("[LOG] {}", message),
+            TelemetryMessage::Debug(message) => format!("[DEBUG] {}", message),
+            TelemetryMessage::Error(message) => format!("[ERROR] {}", message),
+        }
+    }
+}
+
+impl From<TelemetryMessage> for String {
+    #[inline]
+    fn from(message: TelemetryMessage) -> Self {
+        match message {
+            TelemetryMessage::Log(msg) => msg,
+            TelemetryMessage::Debug(msg) => msg,
+            TelemetryMessage::Error(msg) => msg,
+        }
+    }
 }

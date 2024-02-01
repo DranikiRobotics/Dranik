@@ -1,5 +1,18 @@
-//! The main crate for the dranik library.
+//! Dranik, a framework for creating robots.
 //! 
+//! This crate is the main crate for the Dranik framework.
+//! It allows you to simply create a robot using the Dranik framework.
+//! 
+//! However, note that the robot's code is written in python, rather than rust.
+//! 
+//! ## Example
+//! 
+//! ```python
+//! from dranik.api import DranikRuntime
+//! 
+//! def main(r: DranikRuntime):
+//!     r.log("Hello, world!")
+//! ```
 
 #![warn(missing_docs, unused, clippy::all, unsafe_code)]
 #![deny(missing_debug_implementations)]
@@ -10,6 +23,8 @@
 /// 
 /// ```rust
 /// dranik::use_config!();
+/// // or
+/// // dranik::use_config!(dranik);
 /// dranik::main!();
 /// ```
 /// 
@@ -19,6 +34,11 @@
 /// dranik::use_config!(arc);
 /// dranik::main!();
 /// ```
+/// 
+/// This macro is used to help with loading robot configurations.
+/// 
+/// It is guaranteed to be stable and it's API will not change.
+/// (Without a major version bump)
 #[macro_export(local_inner_macros)]
 macro_rules! load_config {
     () => ( $crate::load_config!($crate); );
@@ -38,13 +58,15 @@ macro_rules! load_config {
 /// 
 /// This macro is used to create the main function for the robot.
 /// It is guaranteed to be stable and it's API will not change.
+/// (Without a major version bump)
 /// 
 /// The reason this macro exists is because the main function
 /// is not guaranteed to be stable and may change at any time.
 /// That mostly includes the generic parameters.
 #[macro_export(local_inner_macros)]
 macro_rules! main {
-    () => ($crate::__main::<__DranikRobotConfig>(););
+    () => (fn main() { $crate::main!(@); });
+    (@) => ($crate::__main::<__DranikRobotConfig>(););
 }
 
 #[doc(hidden)]

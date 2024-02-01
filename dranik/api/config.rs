@@ -1,8 +1,5 @@
-use crate::prelude::*;
-use pyo3::prelude::*;
-use pyo3::types::{PyTuple, PyDict};
-
-use pyo3::Python;
+use pyo3::types::{PyDict, PyTuple};
+use pyo3::*;
 
 /// This trait is used to completely configure the robot.
 pub trait RobotConfig {
@@ -10,22 +7,9 @@ pub trait RobotConfig {
     /// 
     /// This is useful for loading rust libraries that will then be used by python.
     /// In fact, this is exactly how ARC is loaded.
-    #[inline(always)]
-    fn python_preload(&self) {}
-    /// The type that will be used for telemetry
-    type TelemetryImpl: Telemetry;
-    /// The type that will be used for gamepad
-    type GamepadImpl: Gamepad;
-    /// The type that will be used for op
-    type OpImpl: Op<
-        TelemetryImpl = Self::TelemetryImpl,
-        GamepadImpl = Self::GamepadImpl,
-    >;
-    /// This function is called to build the arguments that will be passed to the python main function
-    #[inline(always)]
-    fn build_python_main_function_args<'a>(
-        &self, _py: &Python<'_>, _op: &Self::OpImpl
-    ) -> (impl IntoPy<Py<PyTuple>>, Option<&'a PyDict>) {
-        ((), None)
-    }
+    fn python_preload(&self);
+    /// The type of the main function arguments.
+    type Args: IntoPy<Py<PyTuple>>;
+    /// This function is used to create the main function arguments.
+    fn make_main_function_args<'a>(&self, py: Python<'a>) -> (Self::Args, Option<&'a PyDict>);
 }

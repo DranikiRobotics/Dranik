@@ -61,6 +61,7 @@ impl From<&'static str> for Error {
     }
 }
 
+#[cfg(feature = "std")]
 impl From<Error> for String {
     #[inline]
     fn from(error: Error) -> Self {
@@ -80,18 +81,15 @@ unsafe impl Send for Error {}
 #[allow(unsafe_code)]
 unsafe impl Sync for Error {}
 
+#[cfg(feature = "nightly")]
+impl core::error::Error for Error {}
+#[cfg(all(
+    feature = "std",
+    not(feature = "nightly"),
+))]
 impl std::error::Error for Error {}
 
-#[cfg(feature = "axum")]
-impl From<::axum::Error> for Error {
-    #[inline]
-    fn from(_: ::axum::Error) -> Self {
-        Self::Other {
-            message: "Axum error occurred",
-        }
-    }
-}
-
+#[cfg(feature = "std")]
 impl From<::std::io::Error> for Error {
     #[inline]
     fn from(error: ::std::io::Error) -> Self {

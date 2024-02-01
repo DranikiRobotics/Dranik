@@ -13,8 +13,8 @@ path = "lib.rs"
 [dependencies.dranik-api]
 path = "../api"
 features = [
-    "reveal_modules",
-    "axum"
+    "config",
+    "std"
 ]
 
 [dependencies.tokio]

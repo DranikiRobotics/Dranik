@@ -10,20 +10,10 @@ license.workspace = true
 [lib]
 path = "lib.rs"
 
-[dependencies.l2math]
-git = "https://github.com/DranikiRobotics/librobomath"
-package = "l2math"
-
-[dependencies.libtrig]
-git = "https://github.com/DranikiRobotics/librobomath"
-package = "libtrig"
-
-[dependencies.axum]
-optional = true
-version = "0.7"
-
 [dependencies.pyo3]
 version = "0.20"
 
 [features]
-reveal_modules = []
+config = []
+std = []
+nightly = []

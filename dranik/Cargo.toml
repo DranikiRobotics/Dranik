@@ -20,3 +20,6 @@ path = "./api"
 
 [dependencies.dranik-bin]
 path = "./bin"
+
+[features]
+api = []
