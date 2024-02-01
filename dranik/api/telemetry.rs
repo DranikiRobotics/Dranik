@@ -8,9 +8,13 @@ pub trait Telemetry: Clone + PartialEq + Send + Sync {
     /// Sends a debug message to the driver control station
     /// 
     /// It will not be displayed to the driver control station if the robot is not in debug mode.
+    /// 
+    /// If this fails, it will fail silently.
     fn debug<T: Debug>(&self, message: T);
     /// Sends a message to the driver control station
     /// 
     /// This will always be displayed to the driver control station.
+    /// 
+    /// If this fails, it will fail silently.
     fn send<T: Display>(&self, message: T);
 }

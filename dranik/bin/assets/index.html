@@ -1,0 +1,28 @@
+<a>Open the console to see stuff, then refresh to initiate exchange.</a>
+<script>
+    const socket = new WebSocket('ws://localhost:3000/ws');
+
+    socket.addEventListener('open', (event) => {
+        socket.send('Hello Server!');
+    });
+
+    socket.addEventListener('message', (event) => {
+        console.log('Message from server ', event.data);
+    });
+
+
+    setTimeout(() => {
+        const obj = { hello: "world" };
+        const blob = new Blob([JSON.stringify(obj)], {
+            type: "application/json"
+        });
+        console.log("Sending blob over websocket");
+        socket.send(blob);
+    }, 1000);
+
+    setTimeout(() => {
+        socket.send('About done here...');
+        console.log("Sending close over websocket");
+        socket.close(3000, "Crash and Burn!");
+    }, 3000);
+</script>

@@ -1,2 +1,5 @@
-dranik::use_config!();
-dranik::main!();
+dranik::load_config!();
+
+fn main() {
+    dranik::main!();
+}

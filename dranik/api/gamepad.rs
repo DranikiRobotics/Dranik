@@ -39,14 +39,14 @@ pub trait Gamepad: Clone + PartialEq + Send + Sync {
     /// A non-standard 'back' button
     #[inline]
     fn back(&self) -> Result<bool> {
-        Err(HardwareError::Other {
+        Err(Error::Other {
             message: "This gamepad does not have a 'back' button",
         })
     }
     /// A non-standard 'start' button
     #[inline]
     fn start(&self) -> Result<bool> {
-        Err(HardwareError::Other {
+        Err(Error::Other {
             message: "This gamepad does not have a 'start' button",
         })
     }
@@ -84,6 +84,7 @@ impl GamepadStick {
     ///
     /// This is useful for things like precision driving
     #[inline]
+    #[must_use = "This returns a new Angle2D"]
     pub fn angle(&self) -> libtrig::Angle2D {
         libtrig::prelude!();
         libtrig::Angle2D::from_radians(self.y.atan2(self.x))

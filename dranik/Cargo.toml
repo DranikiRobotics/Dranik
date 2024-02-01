@@ -16,5 +16,7 @@ name = "dranik"
 path = "../dranik.rs"
 
 [dependencies.dranik-api]
-features = ["bin"]
 path = "./api"
+
+[dependencies.dranik-bin]
+path = "./bin"

@@ -1,8 +1,8 @@
-#![doc = include_str!("./README.md")]
+//! The main crate for the dranik library.
+//! 
+
 #![warn(missing_docs, unused, clippy::all, unsafe_code)]
 #![deny(missing_debug_implementations)]
-
-use dranik_api::prelude::RobotConfig;
 
 /// Helps with loading robot configurations.
 /// 
@@ -20,8 +20,8 @@ use dranik_api::prelude::RobotConfig;
 /// dranik::main!();
 /// ```
 #[macro_export(local_inner_macros)]
-macro_rules! use_config {
-    () => ( $crate::use_config!($crate); );
+macro_rules! load_config {
+    () => ( $crate::load_config!($crate); );
     ($namespace: path) => (
         use $namespace::{__dranik_config as __DranikRobotConfig};
     );
@@ -44,36 +44,8 @@ macro_rules! use_config {
 /// That mostly includes the generic parameters.
 #[macro_export(local_inner_macros)]
 macro_rules! main {
-    () => ( fn main() {
-        $crate::main::<__DranikRobotConfig>();
-    } );
-}
-
-/// This is the actual main function that is called by the robot.
-/// 
-/// It isn't recommended to call this function directly.
-/// However, if you do, be careful as this function is not
-/// guaranteed to be stable and may change at any time.
-/// See [`main!`] for more information.
-/// 
-/// ## Recommended Usage
-/// 
-/// ```rust
-/// dranik::use_config!();
-/// dranik::main!();
-/// ```
-/// 
-/// ## Example using ARC
-/// 
-/// ```rust
-/// dranik::use_config!(arc);
-/// dranik::main!();
-/// ```
-/// 
-/// [`main!`]: crate::main!
-pub fn main<C: RobotConfig + 'static>() {
-    dranik_api::bin::main::<C>();
+    () => ($crate::__main::<__DranikRobotConfig>(););
 }
 
 #[doc(hidden)]
-pub use dranik_api::bin::__dranik_config;
+pub use dranik_bin::{__dranik_config, __main};

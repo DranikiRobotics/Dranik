@@ -2,13 +2,13 @@
 /// 
 /// ### O_O
 ///
-/// It is a shorthand for `Result<(), HardwareError>`.
+/// It is a shorthand for `Result<(), Error>`.
 pub const IO_OK: Result = Ok(());
 
 /// An error that occurs when reading from or writing to a hardware component
 #[repr(C)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum HardwareError {
+pub enum Error {
     /// The device was disconnected
     DeviceDisconnected,
     /// The device was not found
@@ -24,10 +24,10 @@ pub enum HardwareError {
     },
 }
 
-impl HardwareError {
-    /// Creates a new `HardwareError::Other` with the given message
+impl Error {
+    /// Creates a new `Error::Other` with the given message
     #[inline]
-    #[must_use = "This returns a new HardwareError"]
+    #[must_use = "This returns a new Error"]
     pub const fn new(message: &'static str) -> Self {
         Self::Other { message }
     }
@@ -36,47 +36,71 @@ impl HardwareError {
     #[must_use = "This returns a new string slice"]
     pub const fn as_str(&self) -> &'static str {
         match self {
-            HardwareError::DeviceDisconnected => "Device disconnected",
-            HardwareError::DeviceNotFound => "Device not found",
-            HardwareError::MethodNotImplemented => "Method not implemented",
-            HardwareError::Other { message } => message,
+            Error::DeviceDisconnected => "Device disconnected",
+            Error::DeviceNotFound => "Device not found",
+            Error::MethodNotImplemented => "Method not implemented",
+            Error::Other { message } => message,
         }
     }
 }
 
 /// A result that occurs when reading or writing to a hardware component
-pub type Result<T = (), E = HardwareError> = core::result::Result<T, E>;
+pub type Result<T = (), E = Error> = core::result::Result<T, E>;
 
-impl core::fmt::Display for HardwareError {
+impl core::fmt::Display for Error {
+    #[inline]
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.as_str())
     }
 }
 
-impl From<&'static str> for HardwareError {
+impl From<&'static str> for Error {
     #[inline]
     fn from(message: &'static str) -> Self {
         Self::Other { message }
     }
 }
 
-impl From<HardwareError> for String {
+impl From<Error> for String {
     #[inline]
-    fn from(error: HardwareError) -> Self {
+    fn from(error: Error) -> Self {
         format!("{}", error)
     }
 }
 
-impl From<HardwareError> for &'static str {
+impl From<Error> for &'static str {
     #[inline]
-    fn from(error: HardwareError) -> Self {
+    fn from(error: Error) -> Self {
         error.as_str()
     }
 }
 
 #[allow(unsafe_code)]
-unsafe impl Send for HardwareError {}
+unsafe impl Send for Error {}
 #[allow(unsafe_code)]
-unsafe impl Sync for HardwareError {}
+unsafe impl Sync for Error {}
 
-impl std::error::Error for HardwareError {}
+impl std::error::Error for Error {}
+
+#[cfg(feature = "axum")]
+impl From<::axum::Error> for Error {
+    #[inline]
+    fn from(_: ::axum::Error) -> Self {
+        Self::Other {
+            message: "Axum error occurred",
+        }
+    }
+}
+
+impl From<::std::io::Error> for Error {
+    #[inline]
+    fn from(error: ::std::io::Error) -> Self {
+        match error.kind() {
+            ::std::io::ErrorKind::NotFound => Self::DeviceNotFound,
+            ::std::io::ErrorKind::BrokenPipe => Self::DeviceDisconnected,
+            _ => Self::Other {
+                message: "IO error occurred",
+            },
+        }
+    }
+}

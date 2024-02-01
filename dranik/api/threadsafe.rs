@@ -77,6 +77,30 @@ mod holders {
         }
     }
 
+    impl<'a, T: PartialEq> PartialEq for SafeHeld<'a, T> {
+        #[inline]
+        fn eq(&self, other: &Self) -> bool {
+            *self.0 == *other.0
+        }
+    }
+
+    impl<'a, T: PartialEq> PartialEq for SafeHeldMut<'a, T> {
+        #[inline]
+        fn eq(&self, other: &Self) -> bool {
+            *self.0 == *other.0
+        }
+    }
+
+    impl<T: PartialEq> PartialEq for ThreadSafeHolder<T> {
+        #[inline]
+        fn eq(&self, other: &Self) -> bool {
+            match (self.get(), other.get()) {
+                (Ok(a), Ok(b)) => a == b,
+                _ => false,
+            }
+        }
+    }
+
     impl<T> ThreadSafeHolder<T> {
         #[inline]
         pub fn new(value: T) -> Self {
